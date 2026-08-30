@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>F1 Ultra 3D Grand Prix</title>
+    <title>F1 2002 Legends 3D</title>
     <style>
         * { box-sizing: border-box; user-select: none; -webkit-user-select: none; margin: 0; padding: 0; }
         body { background-color: #030407; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow: hidden; touch-action: none; }
@@ -18,15 +18,15 @@
         .btn-control:active { background: rgba(255, 0, 51, 0.6); transform: scale(0.95); }
         
         .screen-overlay { pointer-events: auto; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 4, 7, 0.88); display: flex; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(12px); z-index: 10; }
-        .main-title { color: #ff0033; font-size: 40px; font-weight: 900; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 4px; text-shadow: 0 0 30px rgba(255, 0, 51, 0.8); text-align: center; }
+        .main-title { color: #ff0033; font-size: 36px; font-weight: 900; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 30px rgba(255, 0, 51, 0.8); text-align: center; }
         .menu-buttons { display: flex; flex-direction: column; gap: 15px; width: 85%; max-width: 320px; }
-        .menu-btn { padding: 16px; background: linear-gradient(135deg, #ff0033 0%, #99001f 100%); color: white; font-weight: 900; font-size: 18px; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 0 25px rgba(255, 0, 51, 0.6); text-transform: uppercase; letter-spacing: 2px; transition: transform 0.2s, box-shadow 0.2s; text-align: center; }
+        .menu-btn { padding: 16px; background: linear-gradient(135deg, #ff0033 0%, #99001f 100%); color: white; font-weight: 900; font-size: 18px; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 0 25px rgba(255, 0, 51, 0.6); text-transform: uppercase; letter-spacing: 2px; transition: transform 0.2s; text-align: center; }
         .menu-btn:active { transform: scale(0.95); }
         
-        .drivers-list { display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 360px; max-height: 65vh; overflow-y: auto; padding: 10px; }
-        .driver-btn { padding: 14px; background: rgba(20, 25, 35, 0.9); border: 2px solid #333; border-radius: 15px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
+        .drivers-list { display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 380px; max-height: 65vh; overflow-y: auto; padding: 10px; }
+        .driver-btn { padding: 14px; background: rgba(20, 25, 35, 0.9); border: 2px solid #333; border-radius: 15px; color: white; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
         .driver-btn:hover, .driver-btn:active { border-color: #ff0033; background: rgba(40, 45, 60, 0.9); transform: scale(0.98); }
-        .team-tag { font-size: 12px; padding: 4px 8px; border-radius: 8px; text-transform: uppercase; font-weight: 900; }
+        .team-tag { font-size: 11px; padding: 4px 8px; border-radius: 8px; text-transform: uppercase; font-weight: 900; }
         
         .authors-box { background: rgba(15, 20, 30, 0.95); border: 2px solid #ff0033; border-radius: 20px; padding: 25px; width: 85%; max-width: 380px; text-align: center; }
         .authors-box h2 { color: #ff0033; font-size: 24px; margin-bottom: 15px; text-transform: uppercase; }
@@ -41,7 +41,7 @@
 
 <div class="ui-layer" id="game-ui" style="display: none;">
     <div class="header">
-        <div class="title">F1 Grand Prix</div>
+        <div class="title">F1 GRAND PRIX</div>
         <div class="driver-info" id="driver-display">Пилот: -</div>
         <div class="score-board" id="score">ОЧКИ: 0</div>
     </div>
@@ -51,7 +51,6 @@
     </div>
 </div>
 
-<!-- Главное меню -->
 <div class="screen-overlay" id="main-menu">
     <h1 class="main-title">F1 ULTRA 3D</h1>
     <div class="menu-buttons">
@@ -60,33 +59,30 @@
     </div>
 </div>
 
-<!-- Меню выбора режимов -->
 <div class="screen-overlay" id="modes-menu" style="display: none;">
-    <h1 class="main-title">ВЫБОР РЕЖИМА</h1>
+    <h1 class="main-title">ВЫБОР СЕЗОНА</h1>
     <div class="menu-buttons">
-        <button class="menu-btn" onclick="openDriverSelect()">GRAND PRIX</button>
+        <button class="menu-btn" style="background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);" onclick="openDriverSelect('2002')">🏆 ЛЕГЕНДЫ 2002</button>
+        <button class="menu-btn" onclick="openDriverSelect('modern')">🏎️ СОВРЕМЕННЫЕ</button>
         <button class="menu-btn" style="background: #222;" onclick="showMenu()">НАЗАД</button>
     </div>
 </div>
 
-<!-- Выбор реальных пилотов F1 -->
 <div class="screen-overlay" id="driver-select-menu" style="display: none;">
-    <h1 class="main-title" style="font-size: 28px;">ВЫБЕРИТЕ ПИЛОТА</h1>
+    <h1 class="main-title" id="driver-select-title" style="font-size: 26px;">ВЫБЕРИТЕ ПИЛОТА</h1>
     <div class="drivers-list" id="drivers-container"></div>
     <button class="back-btn" onclick="openModes()">НАЗАД</button>
 </div>
 
-<!-- Авторы -->
 <div class="screen-overlay" id="authors-screen" style="display: none;">
     <div class="authors-box">
         <h2>АВТОРЫ</h2>
         <p><strong>Разработка:</strong><br>ИИ-Разработчик & Пользователь</p>
-        <p><strong>Режим:</strong><br>Grand Prix F1 с реальными пилотами</p>
+        <p><strong>Особенность:</strong><br>Легендарный сезон F1 2002 года с декóром и ливреями команд!</p>
         <button class="back-btn" onclick="showMenu()">НАЗАД</button>
     </div>
 </div>
 
-<!-- Game Over -->
 <div class="screen-overlay" id="game-over-screen" style="display: none;">
     <h1 class="main-title" style="color: #ff0033;">АВАРИЯ!</h1>
     <p id="game-over-text" style="font-size: 20px; color: #ccc; margin-bottom: 25px;">Вы набрали: 0 очков</p>
@@ -97,16 +93,23 @@
 </div>
 
 <script>
-    // Список реальных пилотов F1
-    const DRIVERS = [
-        { name: "Max Verstappen", team: "Red Bull", color: 0x0600ef, teamBg: "#0600ef" },
-        { name: "Charles Leclerc", team: "Ferrari", color: 0xe10600, teamBg: "#e10600" },
-        { name: "Lewis Hamilton", team: "Ferrari", color: 0xcc0000, teamBg: "#cc0000" },
-        { name: "Lando Norris", team: "McLaren", color: 0xff8000, teamBg: "#ff8000" },
-        { name: "Fernando Alonso", team: "Aston Martin", color: 0x00593f, teamBg: "#00593f" }
+    // База пилотов F1 (2002 года и современные)
+    const DRIVERS_2002 = [
+        { name: "#1 Michael Schumacher", team: "Ferrari 2002", color: 0xc90000, stripeColor: 0xffffff, num: "1", teamBg: "#c90000" },
+        { name: "#3 Juan Pablo Montoya", team: "Williams BMW", color: 0x051b47, stripeColor: 0xffffff, num: "3", teamBg: "#051b47" },
+        { name: "#4 David Coulthard", team: "McLaren Mercedes", color: 0x111111, stripeColor: 0xe6e6e6, num: "4", teamBg: "#222222" },
+        { name: "#14 Kimi Räikkönen", team: "McLaren Mercedes", color: 0x222222, stripeColor: 0xff0000, num: "14", teamBg: "#333333" },
+        { name: "#21 Fernando Alonso", team: "Renault 2002", color: 0x0099ff, stripeColor: 0xffd700, num: "21", teamBg: "#0088cc" }
     ];
 
-    let selectedDriver = DRIVERS[0];
+    const DRIVERS_MODERN = [
+        { name: "Max Verstappen", team: "Red Bull", color: 0x0600ef, stripeColor: 0xff0000, num: "1", teamBg: "#0600ef" },
+        { name: "Charles Leclerc", team: "Ferrari", color: 0xe10600, stripeColor: 0xffffff, num: "16", teamBg: "#e10600" },
+        { name: "Lando Norris", team: "McLaren", color: 0xff8000, stripeColor: 0x111111, num: "4", teamBg: "#ff8000" }
+    ];
+
+    let currentEra = '2002';
+    let selectedDriver = DRIVERS_2002[0];
     let scene, camera, renderer, playerCar;
     let enemies = [], roadLines = [];
     let score = 0, gameActive = false;
@@ -130,21 +133,26 @@
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         container.appendChild(renderer.domElement);
 
-        scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-        const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+        const mainLight = new THREE.DirectionalLight(0xffffff, 1.4);
         mainLight.position.set(20, 40, 20);
         mainLight.castShadow = true;
         scene.add(mainLight);
 
         createTrack();
-        renderDriversList();
         window.addEventListener('resize', onWindowResize);
     }
 
-    function renderDriversList() {
+    function renderDriversList(era) {
+        currentEra = era;
         const container = document.getElementById('drivers-container');
+        const title = document.getElementById('driver-select-title');
         container.innerHTML = '';
-        DRIVERS.forEach(driver => {
+        
+        const drivers = era === '2002' ? DRIVERS_2002 : DRIVERS_MODERN;
+        title.innerText = era === '2002' ? 'СЕЗОН 2002 (ЛЕГЕНДЫ)' : 'СОВРЕМЕННЫЕ ПИЛОТЫ';
+
+        drivers.forEach(driver => {
             const btn = document.createElement('div');
             btn.className = 'driver-btn';
             btn.innerHTML = `
@@ -176,42 +184,84 @@
         }
     }
 
-    function createUltraF1Car(colorHex) {
+    // Создание болида F1 с полноценной ЛИВРЕЕЙ
+    function createDetailedF1Car(mainColorHex, stripeColorHex, driverNumber) {
         const car = new THREE.Group();
-        const bodyMat = new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.2, metalness: 0.5 });
-        const carbonMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.6 });
-        const tireMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.8 });
+        
+        const bodyMat = new THREE.MeshStandardMaterial({ color: mainColorHex, roughness: 0.2, metalness: 0.4 });
+        const stripeMat = new THREE.MeshStandardMaterial({ color: stripeColorHex, roughness: 0.3, metalness: 0.2 });
+        const carbonMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.7 });
+        const tireMat = new THREE.MeshStandardMaterial({ color: 0x1c1c1c, roughness: 0.8 });
+        const rimMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.8, roughness: 0.2 }); // Золотые/серебряные диски
 
-        const chassis = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.35, 2.2), bodyMat);
+        // 1. Основное шасси
+        const chassis = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.35, 2.2), bodyMat);
         chassis.position.set(0, 0.35, -0.2);
         car.add(chassis);
 
+        // Ливрея: центральная полоса вдоль всего кузова
+        const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.37, 2.22), stripeMat);
+        stripe.position.set(0, 0.36, -0.2);
+        car.add(stripe);
+
+        // 2. Носовой обтекатель
         const nose = new THREE.Mesh(new THREE.ConeGeometry(0.35, 1.8, 5), bodyMat);
         nose.rotation.x = Math.PI / 2; nose.position.set(0, 0.32, -2.0); nose.scale.set(1, 1, 0.5);
         car.add(nose);
 
+        // 3. Переднее антикрыло (с цветными торцевыми пластинами)
         const fWing = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.04, 0.45), carbonMat);
         fWing.position.set(0, 0.12, -2.7);
         car.add(fWing);
 
+        const fWingEndL = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.25, 0.5), stripeMat);
+        fWingEndL.position.set(-1.05, 0.2, -2.7);
+        car.add(fWingEndL);
+        const fWingEndR = fWingEndL.clone();
+        fWingEndR.position.x = 1.05;
+        car.add(fWingEndR);
+
+        // 4. Заднее антикрыло (Ливрея)
         const rWing = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.06, 0.4), bodyMat);
         rWing.position.set(0, 0.95, 1.25);
         car.add(rWing);
 
+        const rWingFlap = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.04, 0.2), stripeMat);
+        rWingFlap.position.set(0, 1.02, 1.25);
+        car.add(rWingFlap);
+
+        // 5. Кокпит и шлем пилота
+        const cockpit = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.2, 0.7), carbonMat);
+        cockpit.position.set(0, 0.52, -0.1);
+        car.add(cockpit);
+
+        const helmet = new THREE.Mesh(new THREE.SphereGeometry(0.16, 16, 16), stripeMat);
+        helmet.position.set(0, 0.65, -0.1);
+        car.add(helmet);
+
+        // 6. Колёса и диски
         const wheelGeo = new THREE.CylinderGeometry(0.33, 0.33, 0.45, 24);
+        const rimGeo = new THREE.CylinderGeometry(0.2, 0.2, 0.46, 12);
+        
         [[-1.05, 0.33, -1.6], [1.05, 0.33, -1.6], [-1.1, 0.36, 0.9], [1.1, 0.36, 0.9]].forEach(pos => {
             const tire = new THREE.Mesh(wheelGeo, tireMat);
             tire.rotation.z = Math.PI / 2;
             tire.position.set(...pos);
             car.add(tire);
+
+            const rim = new THREE.Mesh(rimGeo, rimMat);
+            rim.rotation.z = Math.PI / 2;
+            rim.position.set(...pos);
+            car.add(rim);
         });
 
         return car;
     }
 
     function spawnEnemy() {
-        const colors = [0xcccccc, 0xff0055, 0x00ffff, 0xffff00];
-        const enemy = createUltraF1Car(colors[Math.floor(Math.random() * colors.length)]);
+        const pool = currentEra === '2002' ? DRIVERS_2002 : DRIVERS_MODERN;
+        const enemyData = pool[Math.floor(Math.random() * pool.length)];
+        const enemy = createDetailedF1Car(enemyData.color, enemyData.stripeColor, enemyData.num);
         enemy.position.set((Math.random() - 0.5) * (ROAD_WIDTH - 3.2), 0, -140);
         enemy.speed = 0.45 + Math.random() * 0.35;
         scene.add(enemy);
@@ -222,13 +272,13 @@
         selectedDriver = driver;
         score = 0;
         document.getElementById('score').innerText = "ОЧКИ: 0";
-        document.getElementById('driver-display').innerText = `Пилот: ${driver.name} (${driver.team})`;
+        document.getElementById('driver-display').innerText = `Пилот: ${driver.name}`;
         
         if (playerCar) scene.remove(playerCar);
         enemies.forEach(e => scene.remove(e));
         enemies = [];
 
-        playerCar = createUltraF1Car(driver.color);
+        playerCar = createDetailedF1Car(driver.color, driver.stripeColor, driver.num);
         playerCar.position.set(0, 0, 0);
         scene.add(playerCar);
 
@@ -296,8 +346,9 @@
         document.getElementById('modes-menu').style.display = 'flex';
     }
 
-    function openDriverSelect() {
+    function openDriverSelect(era) {
         hideAllOverlays();
+        renderDriversList(era);
         document.getElementById('driver-select-menu').style.display = 'flex';
     }
 
